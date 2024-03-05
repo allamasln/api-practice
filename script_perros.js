@@ -3,33 +3,21 @@ const listButtonElDOM = document.getElementById('list')
 const containerElDOM = document.querySelector('main')
 const formElDOM = document.querySelector('form')
 
-listButtonElDOM.addEventListener('click', () => {
-	console.log('CLICK')
+const baseURL = 'https://dog.ceo/api'
 
-	getImagesByBreed()
+listButtonElDOM.addEventListener('click', () => {
+	getImagesByBreed('dalmatian')
 })
 
 randomButtonElDOM.addEventListener('click', () => {
-	console.log('CLICK')
-
-	// 1. Obtener de la api una cerveza aleatoria
-
-	fetch('https://dog.ceo/api/breeds/image/random')
-		.then((res) => res.json())
-		.then((data) => {
-			containerElDOM.innerHTML = ''
-
-			const img = document.createElement('img')
-			img.src = data.message
-
-			img.height = '500'
-
-			containerElDOM.appendChild(img)
-		})
+	getRandomImageByBreed()
 })
 
+getAllBreeds()
+
 function getAllBreeds() {
-	fetch('https://dog.ceo/api/breeds/list/all')
+	const endpoint = baseURL + '/breeds/list/all'
+	fetch(endpoint)
 		.then((res) => res.json())
 		.then((data) => {
 			const breeds = []
@@ -48,24 +36,35 @@ function getAllBreeds() {
 				select.appendChild(option)
 			})
 
+			const checkbox = document.createElement('input')
+			checkbox.type = 'checkbox'
+			const label = document.createElement('label')
+			label.textContent = 'OBTENER SOLO UNA ALEATORIA DE LA RAZA'
+
 			const button = document.createElement('button')
 			button.textContent = 'Obtiene fotos de la raza seleccionada'
 
 			button.addEventListener('click', (event) => {
 				event.preventDefault()
 
-				// Pinte la lista de perros de la raza seleccionada
-				console.log(select.value)
+				const breed = select.value
+				const isChecked = checkbox.checked
+
+				if (isChecked) {
+					getRandomImageByBreed(breed)
+				} else {
+					getImagesByBreed(breed)
+				}
 			})
 
-			formElDOM.append(select, button)
+			formElDOM.append(select, checkbox, label, button)
 		})
 }
 
-getAllBreeds()
-
 function getImagesByBreed(breed) {
-	fetch('https://dog.ceo/api/breed/dalmatian/images')
+	const endpoint = `${baseURL}/breed/${breed}/images`
+
+	fetch(endpoint)
 		.then((res) => res.json())
 		.then(({ message: dogs }) => {
 			containerElDOM.innerHTML = ''
@@ -82,5 +81,24 @@ function getImagesByBreed(breed) {
 			})
 
 			containerElDOM.appendChild(list)
+		})
+}
+
+function getRandomImageByBreed(breed) {
+	let endpoint = baseURL + '/'
+	endpoint += breed ? `breed/${breed}/images` : `breeds/image`
+	endpoint += '/random'
+
+	fetch(endpoint)
+		.then((res) => res.json())
+		.then((data) => {
+			containerElDOM.innerHTML = ''
+
+			const img = document.createElement('img')
+			img.src = data.message
+
+			img.height = '500'
+
+			containerElDOM.appendChild(img)
 		})
 }
