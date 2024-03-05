@@ -16,14 +16,12 @@ listButtonElDOM.addEventListener('click', () => {
 
 			const beers = data.map((beer) => beer.image_url)
 
-			console.log(beers)
 			beers.forEach((beerImage) => {
 				const item = document.createElement('li')
 				const img = document.createElement('img')
 				img.src = beerImage
 
 				item.appendChild(img)
-
 				list.appendChild(item)
 			})
 
