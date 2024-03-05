@@ -1,21 +1,23 @@
-// FILOSOFIA INCREMENTAL
+const buttonElDOM = document.querySelector('button')
+const containerElDOM = document.querySelector('main')
 
-// Declara una función que consulta a la api una cerveza random imprima por consola un array de strings con todos los incredientes
-// ejemplo
+buttonElDOM.addEventListener('click', () => {
+	console.log('CLICK')
 
-function getAllIngredients() {
+	// 1. Obtener de la api una cerveza aleatoria
+
 	fetch('https://api.punkapi.com/v2/beers/random')
 		.then((res) => res.json())
-		.then((data) => {
-			const { ingredients } = data[0]
-			const output = []
+		.then(([beer]) => {
+			if (!beer.image_url) return
 
-			for (const ingredient in ingredients) {
-				output.push(ingredient)
-			}
+			containerElDOM.innerHTML = ''
 
-			console.log(output)
+			const img = document.createElement('img')
+			img.src = beer.image_url
+
+			img.height = '500'
+
+			containerElDOM.appendChild(img)
 		})
-}
-
-getAllIngredients()
+})
