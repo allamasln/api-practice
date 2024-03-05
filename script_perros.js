@@ -1,10 +1,24 @@
-// FILOSOFIA INCREMENTAL
+const buttonElDOM = document.querySelector('button')
+const containerElDOM = document.querySelector('main')
 
-// Declara una función getAllBreeds que consulta a la api de perros e imprima un array de strings con todas las razas de perro.
+buttonElDOM.addEventListener('click', () => {
+	console.log('CLICK')
 
-//dog.ceo/dog-api/
+	// 1. Obtener de la api una cerveza aleatoria
 
-// ejemplo
+	fetch('https://dog.ceo/api/breeds/image/random')
+		.then((res) => res.json())
+		.then((data) => {
+			containerElDOM.innerHTML = ''
+
+			const img = document.createElement('img')
+			img.src = data.message
+
+			img.height = '500'
+
+			containerElDOM.appendChild(img)
+		})
+})
 
 function getAllBreeds() {
 	fetch('https://dog.ceo/api/breeds/list/all')

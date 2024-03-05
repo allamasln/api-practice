@@ -1,0 +1,16 @@
+ul {
+	list-style: none;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}
+
+li {
+	background-color: #ccc;
+	padding: 1rem;
+}
+img {
+	width: 200px;
+	height: 200px;
+	object-fit: contain;
+}
